@@ -1,3 +1,9 @@
+debsign-rs (0.1.1) unstable; urgency=medium
+
+  * .gitignore,debian/files
+
+ -- Shaun Savage <savages@crmep.com>  Thu, 11 Dec 2025 19:11:14 +0000
+
 debsign-rs (0.1.0) unstable; urgency=medium
 
   * Initial release.
