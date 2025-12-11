@@ -1,0 +1,27 @@
+Source: debsign-rs
+Section: admin
+Priority: optional
+Maintainer: Shaun Savage <savages@crmep.com>
+Build-Depends: debhelper-compat (= 13),
+               cargo,
+               rustc (>= 1.70),
+               pkg-config,
+               libc6-dev,
+               nettle-dev,
+               clang,
+               llvm
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: debsign-rs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Sign Debian packages with GPG (Rust implementation)
+ debsign-rs is a tool for signing Debian packages using GPG.
+ Written in Rust using sequoia-openpgp for cryptographic operations.
+ .
+ Features:
+  * Sign .deb files with detached GPG signatures
+  * Verify existing signatures on .deb files
+  * Support for ASCII-armored key files
+  * Generates MD5, SHA1, and SHA256 checksums

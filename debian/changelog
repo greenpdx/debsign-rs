@@ -1,0 +1,5 @@
+debsign-rs (0.1.0) unstable; urgency=medium
+
+  * Initial release.
+
+ -- Shaun Savage <savages@crmep.com>  Wed, 11 Dec 2025 03:00:00 +0000
