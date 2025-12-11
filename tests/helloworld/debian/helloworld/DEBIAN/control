@@ -1,0 +1,10 @@
+Package: helloworld
+Version: 0.1.0
+Architecture: arm64
+Maintainer: Shaun Savage <savages@crmep.com>
+Installed-Size: 335
+Depends: libc6 (>= 2.34), libgcc-s1 (>= 4.2)
+Section: misc
+Priority: optional
+Description: Simple hello world test package
+ A minimal hello world binary for testing debsign-rs.

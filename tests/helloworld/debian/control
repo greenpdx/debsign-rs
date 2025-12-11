@@ -1,0 +1,15 @@
+Source: helloworld
+Section: misc
+Priority: optional
+Maintainer: Shaun Savage <savages@crmep.com>
+Build-Depends: debhelper-compat (= 13),
+               cargo,
+               rustc
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: helloworld
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Simple hello world test package
+ A minimal hello world binary for testing debsign-rs.

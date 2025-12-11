@@ -1,0 +1,13 @@
+[package]
+name = "helloworld"
+version = "0.1.0"
+edition = "2024"
+authors = ["Shaun Savage <savages@crmep.com>"]
+description = "Simple hello world test package"
+license = "MIT"
+
+[dependencies]
+
+[profile.release]
+strip = true
+lto = true
