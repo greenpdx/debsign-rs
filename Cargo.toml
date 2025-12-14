@@ -5,6 +5,12 @@ edition = "2021"
 authors = ["Shaun Savage <savages@crmep.com>"]
 description = "Sign Debian packages with GPG"
 license = "MIT OR Apache-2.0"
+repository = "https://github.com/greenpdx/debsign-rs"
+homepage = "https://github.com/greenpdx/debsign-rs"
+readme = "README.md"
+keywords = ["debian", "deb", "gpg", "signing", "packaging"]
+categories = ["command-line-utilities", "cryptography"]
+rust-version = "1.70"
 
 [[bin]]
 name = "debsign"

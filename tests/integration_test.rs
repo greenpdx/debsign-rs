@@ -14,7 +14,11 @@ fn test_dir() -> PathBuf {
 fn debsign_binary() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("target")
-        .join(if cfg!(debug_assertions) { "debug" } else { "release" })
+        .join(if cfg!(debug_assertions) {
+            "debug"
+        } else {
+            "release"
+        })
         .join("debsign")
 }
 
@@ -36,7 +40,11 @@ fn test_public_key() -> PathBuf {
 
 #[test]
 fn test_unsigned_deb_exists() {
-    assert!(unsigned_deb().exists(), "Unsigned test deb file should exist at {:?}", unsigned_deb());
+    assert!(
+        unsigned_deb().exists(),
+        "Unsigned test deb file should exist at {:?}",
+        unsigned_deb()
+    );
 }
 
 #[test]
@@ -177,13 +185,20 @@ fn test_verbose_shows_deb_members() {
     let stdout = String::from_utf8_lossy(&output.stdout);
 
     // Verbose output should show deb members
-    assert!(stdout.contains("debian-binary"), "Should show debian-binary member");
     assert!(
-        stdout.contains("control.tar") || stdout.contains("control.tar.xz") || stdout.contains("control.tar.zst"),
+        stdout.contains("debian-binary"),
+        "Should show debian-binary member"
+    );
+    assert!(
+        stdout.contains("control.tar")
+            || stdout.contains("control.tar.xz")
+            || stdout.contains("control.tar.zst"),
         "Should show control.tar member"
     );
     assert!(
-        stdout.contains("data.tar") || stdout.contains("data.tar.xz") || stdout.contains("data.tar.zst"),
+        stdout.contains("data.tar")
+            || stdout.contains("data.tar.xz")
+            || stdout.contains("data.tar.zst"),
         "Should show data.tar member"
     );
 }
@@ -193,9 +208,7 @@ fn test_dpkg_verify_signed_deb() {
     // This test requires dpkg-sig to be installed
     // Skip if not available
 
-    let dpkg_sig_check = Command::new("which")
-        .arg("dpkg-sig")
-        .output();
+    let dpkg_sig_check = Command::new("which").arg("dpkg-sig").output();
 
     if dpkg_sig_check.is_err() || !dpkg_sig_check.unwrap().status.success() {
         eprintln!("Skipping dpkg-sig test: dpkg-sig not installed");
@@ -235,8 +248,12 @@ fn test_dpkg_verify_signed_deb() {
     // dpkg-sig should recognize the signature
     // Note: It may report UNKNOWNSIG if key isn't trusted, but it should find *a* signature
     assert!(
-        stdout.contains("GOODSIG") || stdout.contains("UNKNOWNSIG") || stderr.contains("GOODSIG") || stderr.contains("UNKNOWNSIG"),
+        stdout.contains("GOODSIG")
+            || stdout.contains("UNKNOWNSIG")
+            || stderr.contains("GOODSIG")
+            || stderr.contains("UNKNOWNSIG"),
         "dpkg-sig should find a signature in the signed deb.\nstdout: {}\nstderr: {}",
-        stdout, stderr
+        stdout,
+        stderr
     );
 }

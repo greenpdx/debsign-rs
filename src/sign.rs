@@ -50,9 +50,7 @@ impl Signer {
         } else if alt_keyring_path.exists() {
             Self::find_key_in_keyring(&alt_keyring_path, key_id)?
         } else {
-            anyhow::bail!(
-                "No GnuPG keyring found. Please specify a key file with --key-file"
-            );
+            anyhow::bail!("No GnuPG keyring found. Please specify a key file with --key-file");
         };
 
         Ok(Self {
@@ -128,7 +126,11 @@ impl Signer {
                 .decrypt_secret(passphrase)?
                 .into_keypair()?
         } else {
-            signing_key.key().clone().parts_into_secret()?.into_keypair()?
+            signing_key
+                .key()
+                .clone()
+                .parts_into_secret()?
+                .into_keypair()?
         };
 
         // Create the signature
@@ -136,7 +138,9 @@ impl Signer {
         {
             let message = Message::new(&mut signature);
             let message = Armorer::new(message).build()?;
-            let mut signer = OpenpgpSigner::new(message, signing_keypair).detached().build()?;
+            let mut signer = OpenpgpSigner::new(message, signing_keypair)
+                .detached()
+                .build()?;
             signer.write_all(data.as_bytes())?;
             signer.finalize()?;
         }
@@ -237,8 +241,8 @@ impl Verifier {
             },
         };
 
-        let mut verifier = DetachedVerifierBuilder::from_bytes(signature)?
-            .with_policy(&policy, None, helper)?;
+        let mut verifier =
+            DetachedVerifierBuilder::from_bytes(signature)?.with_policy(&policy, None, helper)?;
 
         verifier.verify_bytes(data.as_bytes())?;
 

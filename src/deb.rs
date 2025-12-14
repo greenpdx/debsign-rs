@@ -163,10 +163,8 @@ impl DebFile {
             let mut content = Vec::new();
             entry.read_to_end(&mut content)?;
 
-            let mut header = ar::Header::new(
-                entry.header().identifier().to_vec(),
-                content.len() as u64,
-            );
+            let mut header =
+                ar::Header::new(entry.header().identifier().to_vec(), content.len() as u64);
             header.set_mode(entry.header().mode());
             header.set_mtime(entry.header().mtime());
             header.set_uid(entry.header().uid());
