@@ -81,12 +81,38 @@ A `.deb` file is an `ar` archive containing:
 
 When signed, debsign adds a `_gpgorigin` file containing a detached GPG signature of the checksums (MD5, SHA1, SHA256) of all archive members.
 
-## Build dependencies
+## Build Dependencies
+
+Building from source requires the following:
 
 - Rust 1.70+
-- nettle-dev
-- clang
-- llvm
+- pkg-config
+- nettle development libraries
+- clang/llvm
+
+### Debian/Ubuntu
+
+```bash
+sudo apt install pkg-config nettle-dev clang llvm
+```
+
+### Arch Linux
+
+```bash
+sudo pacman -S pkg-config nettle clang --needed
+```
+
+### Fedora
+
+```bash
+sudo dnf install pkg-config nettle-devel clang
+```
+
+### macOS
+
+```bash
+brew install pkg-config nettle llvm
+```
 
 ## License
 
