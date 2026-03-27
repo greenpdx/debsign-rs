@@ -123,7 +123,8 @@ impl DebFile {
         let use_temp = output_path == self.path;
         let temp_file;
         let actual_output: &Path = if use_temp {
-            temp_file = tempfile::NamedTempFile::new()?;
+            let temp_dir = output_path.parent().unwrap_or(Path::new("."));
+            temp_file = tempfile::NamedTempFile::new_in(temp_dir)?;
             temp_file.path()
         } else {
             output_path

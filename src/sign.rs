@@ -166,19 +166,41 @@ impl Verifier {
         let gnupg_home = std::env::var("GNUPGHOME")
             .unwrap_or_else(|_| format!("{}/.gnupg", std::env::var("HOME").unwrap_or_default()));
 
-        let keyring_path = Path::new(&gnupg_home).join("pubring.gpg");
         let mut certs = Vec::new();
 
-        if keyring_path.exists() {
-            let file = File::open(&keyring_path)?;
-            let ppr = PacketParser::from_reader(file)?;
-            for cert in CertParser::from(ppr) {
-                if let Ok(cert) = cert {
-                    certs.push(cert);
+        // Try pubring.gpg (legacy) and pubring.kbx (modern)
+        for keyring in &["pubring.gpg", "pubring.kbx"] {
+            let keyring_path = Path::new(&gnupg_home).join(keyring);
+            if keyring_path.exists() {
+                if let Ok(file) = File::open(&keyring_path) {
+                    if let Ok(ppr) = PacketParser::from_reader(file) {
+                        for cert in CertParser::from(ppr) {
+                            if let Ok(cert) = cert {
+                                certs.push(cert);
+                            }
+                        }
+                    }
                 }
             }
         }
 
+        Ok(Self { certs })
+
+    }
+
+    /// Create a verifier from a key file
+    pub fn from_file<P: AsRef<Path>>(key_file: P) -> Result<Self> {
+        let mut certs = Vec::new();
+        let file = File::open(key_file.as_ref())?;
+        let ppr = PacketParser::from_reader(file)?;
+        for cert in CertParser::from(ppr) {
+            if let Ok(cert) = cert {
+                certs.push(cert);
+            }
+        }
+        if certs.is_empty() {
+            anyhow::bail!("No valid certificates found in key file");
+        }
         Ok(Self { certs })
     }
 

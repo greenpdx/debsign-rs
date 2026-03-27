@@ -108,8 +108,16 @@ fn verify_deb(args: &Args) -> Result<()> {
         // Regenerate checksums
         let checksums = deb_info.generate_checksums()?;
 
-        // Verify
-        let verifier = sign::Verifier::new()?;
+        if args.verbose {
+            println!("Checksums to verify:\n{}", checksums);
+        }
+
+        // Verify - use key file if provided, otherwise try keyring
+        let verifier = if let Some(key_file) = &args.key_file {
+            sign::Verifier::from_file(key_file)?
+        } else {
+            sign::Verifier::new()?
+        };
         let result = verifier.verify(&checksums, signature)?;
 
         if result.valid {

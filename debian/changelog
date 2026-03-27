@@ -1,3 +1,9 @@
+debsign-rs (0.1.2) unstable; urgency=medium
+
+  * src/deb.rs,src/main.rs,src/sign.rs
+
+ -- Shaun Savage <savages@crmep.com>  Fri, 27 Mar 2026 18:59:59 +0000
+
 debsign-rs (0.1.1) unstable; urgency=medium
 
   * .gitignore,debian/files
