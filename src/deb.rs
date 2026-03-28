@@ -138,20 +138,7 @@ impl DebFile {
         let output_file = File::create(actual_output)?;
         let mut output_builder = ar::Builder::new(output_file);
 
-        // First, add the signature as _gpgorigin (must be first for dpkg-sig compatibility)
-        let mut sig_header = ar::Header::new(b"_gpgorigin".to_vec(), signature.len() as u64);
-        sig_header.set_mode(0o100644);
-        sig_header.set_mtime(
-            std::time::SystemTime::now()
-                .duration_since(std::time::UNIX_EPOCH)
-                .unwrap()
-                .as_secs(),
-        );
-        sig_header.set_uid(0);
-        sig_header.set_gid(0);
-        output_builder.append(&sig_header, signature)?;
-
-        // Copy all other entries (except any existing _gpgorigin)
+        // Copy all entries (except any existing _gpgorigin)
         while let Some(entry) = input_archive.next_entry() {
             let mut entry = entry?;
             let name = String::from_utf8_lossy(entry.header().identifier()).to_string();
@@ -173,6 +160,20 @@ impl DebFile {
 
             output_builder.append(&header, content.as_slice())?;
         }
+
+        // Append _gpgorigin signature AFTER all original members
+        // debian-binary must remain the first member for dpkg to accept the .deb
+        let mut sig_header = ar::Header::new(b"_gpgorigin".to_vec(), signature.len() as u64);
+        sig_header.set_mode(0o100644);
+        sig_header.set_mtime(
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_secs(),
+        );
+        sig_header.set_uid(0);
+        sig_header.set_gid(0);
+        output_builder.append(&sig_header, signature)?;
 
         // Finalize
         drop(output_builder);

@@ -152,15 +152,22 @@ fn test_verify_signed_deb() {
 
 #[test]
 fn test_verbose_shows_checksums() {
+    let verbose_output = test_dir().join("verbose_checksums_signed.deb");
+    let _ = std::fs::remove_file(&verbose_output);
+
     let output = Command::new(debsign_binary())
         .args([
             "-V",
             "--key-file",
             test_key().to_str().unwrap(),
+            "--output",
+            verbose_output.to_str().unwrap(),
             unsigned_deb().to_str().unwrap(),
         ])
         .output()
         .expect("Failed to run debsign");
+
+    let _ = std::fs::remove_file(&verbose_output);
 
     let stdout = String::from_utf8_lossy(&output.stdout);
 
@@ -172,15 +179,22 @@ fn test_verbose_shows_checksums() {
 
 #[test]
 fn test_verbose_shows_deb_members() {
+    let verbose_output = test_dir().join("verbose_members_signed.deb");
+    let _ = std::fs::remove_file(&verbose_output);
+
     let output = Command::new(debsign_binary())
         .args([
             "-V",
             "--key-file",
             test_key().to_str().unwrap(),
+            "--output",
+            verbose_output.to_str().unwrap(),
             unsigned_deb().to_str().unwrap(),
         ])
         .output()
         .expect("Failed to run debsign");
+
+    let _ = std::fs::remove_file(&verbose_output);
 
     let stdout = String::from_utf8_lossy(&output.stdout);
 

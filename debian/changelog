@@ -1,3 +1,9 @@
+debsign-rs (0.1.3) unstable; urgency=medium
+
+  * src/deb.rs,tests/helloworld_signed_0.1.0_arm64.deb,tests/integration_test.rs
+
+ -- Shaun Savage <savages@crmep.com>  Sat, 28 Mar 2026 16:59:48 +0000
+
 debsign-rs (0.1.2) unstable; urgency=medium
 
   * src/deb.rs,src/main.rs,src/sign.rs
